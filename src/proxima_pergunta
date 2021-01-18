@@ -1,0 +1,40 @@
+// doenças que a pessoa não pode ter 
+// (filtro = características incompativeis)
+match (person:Person { Name : "person 1"})
+optional match (person)-[i:INFO]->(q:Question)<-[r:REQUIRE]-(d:Disease)
+where i.DateTime + duration( {days : 15} ) >= datetime() and
+(i.Answer < r.minValue or i.Answer > r.maxValue)
+with collect(d.Name) as cantHave , person , collect(r) as answered
+
+// doenças que a pessoa pode ter
+// ( todas doenças - filtro )
+optional match(d:Disease)
+where not d.Name in cantHave 
+with person , d , answered
+
+// questoes de caracteristicas que podem ser feitas 
+//((doenças possiveis -> todas perguntas) - perguntas já realizadas )
+optional match (d)-[r:REQUIRE]->(q:Question)
+where not r in answered
+with person , d , collect(id(q)) as infoQuestion
+
+// sensações já respondidas
+// (pessoa -> todas sensacoes informadas)
+optional match(person)-[f:FELL]->(:Symptom)-[:ASK]->(q:Question)
+where f.DateTime + duration({ days : 15 }) >= datetime()
+with person , d , infoQuestion ,  collect(q.Description) as answered
+
+//questoes de sintomas que podem ser feitas
+//(todas sensações - todas sensações informadas)
+optional match (d)-[:HAS]->(:Symptom)-[:ASK]->(q:Question)
+where not q.Description in answered
+
+// todas questoes
+// ( todas perguntas não respondidas referentes a (sensação + informação))
+with person , collect(id(q)) + infoQuestion as questions
+
+// selecionando a melhor questão
+unwind questions as question
+with question , count(question) as cont
+match (q:Question) where id(q) = question
+return q.Description , cont order by cont desc limit 3
