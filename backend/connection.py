@@ -12,7 +12,7 @@ class Connection:
 		function = obj.insert()
 		if not function : return None
 		with self.driver.session() as session:
-			res = session.write_transaction(function,())
+			res = session.write_transaction(function)
 			return res
 			
 	def get(self,obj_id):
@@ -29,7 +29,8 @@ class Connection:
 
 if __name__ == "__main__" :
 	from node import person
-	p = person.Person(3)
-	c = Connection("bolt://3.94.181.235:32839","neo4j","files-interface-rugs")
+	
+	c = Connection("bolt://52.72.13.205:51855","neo4j","decreases-profile-aluminum")
+	p = person.Person("gooo")
 	p = c.save(p)
-	print(p,c.get(13))
+	print(p,c.get(0))
