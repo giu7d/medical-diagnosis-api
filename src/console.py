@@ -1,11 +1,6 @@
 import neo as neo_connection
 import random
 
-neo = neo_connection.Neo4jConnection(
-    uri="bolt://3.94.181.235:32839",
-    user="neo4j",
-    pwd="files-interface-rugs")
-
 def get_year():
 	while True:
 		year = input("Year: ")
