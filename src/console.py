@@ -2,9 +2,9 @@ import neo as neo_connection
 import random
 
 neo = neo_connection.Neo4jConnection(
-    uri="bolt://100.25.118.63:32789",
+    uri="bolt://3.94.181.235:32839",
     user="neo4j",
-    pwd="meeting-struts-pilot")
+    pwd="files-interface-rugs")
 
 def get_year():
 	while True:
@@ -48,22 +48,22 @@ structure = {
 	"Disease" : {
 		"SearchBy":"Name",
 		"attribute" : [
-			("Name","str"),
-			("Description","str")
+			("Name","string"),
+			("Description","string")
 		],
 		"link" : {
 			"HAS" : {
 				"node" : "Symptom",
 				"attribute": [
-					("minValue","int"),
-					("maxValue","int")
+					("minValue","integer"),
+					("maxValue","integer")
 				]
 			},
 			"REQUIRE" : {
 				"node" : "Question",
 				"attribute": [
-					("minValue","int"),
-					("maxValue","int")
+					("minValue","integer"),
+					("maxValue","integer")
 				]
 			}
 		}
@@ -71,8 +71,8 @@ structure = {
 	"Symptom" : {
 		"SearchBy":"Name",
 		"attribute" : [
-			("Name","str"),
-			("Description","str")
+			("Name","string"),
+			("Description","string")
 		],
 		"link" : {
 			"ASK" : {
@@ -84,37 +84,37 @@ structure = {
 	"Question": {
 		"SearchBy":"Name",
 		"attribute" : [
-			("Name","str"),
-			("Description","str"),
-			("DueAnswer","dat"),
-			("MetaAnswer","jsn")
+			("Name","string"),
+			("Description","string"),
+			("DueAnswer","date"),
+			("MetaAnswer","json")
 		],
 		"link" : {},
 	},
 	"Person" : {
 		"SearchBy":"Name",
 		"attribute" : [
-			("Name","str")
+			("Name","string")
 		],
 		"link" : {
 			"FEEL" : {
 				"node" : "Symptom",
 				"attribute": [
-					("Answer","nrm"),
-					("DateTime","dat")
+					("Answer","norm"),
+					("DateTime","date")
 				]
 			},
 			"INFO" : {
 				"node" : "Question",
 				"attribute": [
-					("Answer","nrm"),
-					("DateTime","dat")
+					("Answer","norm"),
+					("DateTime","date")
 				]
 			},
 			"AT" : {
 				"node" : "Location",
 				"attribute": [
-					("DateTime","dat")
+					("DateTime","date")
 				]
 			}
 		}
@@ -122,9 +122,9 @@ structure = {
 	"Location" : {
 		"SearchBy":"Name",
 		"attribute" : [
-			("Latitude","int"),
-			("Longitude","int"),
-			("Name","str")
+			("Latitude","integer"),
+			("Longitude","integer"),
+			("Name","string")
 		],
 		"link" : {},
 	}
@@ -162,6 +162,7 @@ def create(name):
 		val = data_get(f"value for {name}.{att}: ",typ)
 		cod += f'{att}:{val}'
 	cod = f"create (:{name}"+"{"+cod+"});"
+	#return cod
 	neo.query(cod)
 		
 def nodes():
@@ -238,57 +239,12 @@ def api_doc():
 			print(api_url_create_link(j))
 	for i in structure: print(api_url_get_node(i))
 
-def get_next_question(name):
-    query = """
-// doenças que a pessoa não pode ter 
-// (filtro = características incompativeis)
-match (person:Person { Name : """+f'"{name}"'+"""})
-optional match (person)-[i:INFO]->(q:Question)<-[r:REQUIRE]-(d:Disease)
-where i.DateTime + q.DueAnswer >= datetime() and
-(i.Answer < r.minValue or i.Answer > r.maxValue)
-with collect(d.Name) as cantHave , person , collect(r) as answered
-
-// doenças que a pessoa pode ter
-// ( todas doenças - filtro )
-optional match(d:Disease)
-where not d.Name in cantHave 
-with person , d , answered
-
-// questoes de caracteristicas que podem ser feitas 
-//((doenças possíveis -> todas perguntas) - perguntas já realizadas )
-optional match (d)-[r:REQUIRE]->(q:Question)
-where not r in answered
-with person , d , collect(id(q)) as infoQuestion
-
-// sensações já respondidas
-// (pessoa -> todas sensacoes informadas)
-optional match(person)-[f:FELL]->(:Symptom)-[:ASK]->(q:Question)
-where f.DateTime + q.DueAnswer >= datetime()
-with person , d , infoQuestion ,  collect(q.Description) as answered
-
-//questoes de sintomas que podem ser feitas
-//(todas sensações - todas sensações informadas)
-optional match (d)-[:HAS]->(:Symptom)-[:ASK]->(q:Question)
-where not q.Description in answered
-
-// todas questoes
-// ( todas perguntas não respondidas referentes a (sensação + informação))
-with person , collect(id(q)) + infoQuestion as questions
-
-// selecionando a melhor questão
-unwind questions as question
-with question , count(question) as cont
-match (q:Question) where id(q) = question
-return q.Description as question order by cont desc limit 1
-"""
-    return neo.query(query)
-
 operation = {
 	"insert new node" : insert_value,
 	"link new node" : link_value,
 	"show all values of node" :  show_all,
 	"api documentation" : api_doc,
-	"exit" : "exit",
+	"exit" : "exit"
 }
 	
 def menu():
@@ -298,5 +254,124 @@ def menu():
 		operation[op]()
 		bar()
 
-#print())
-menu()
+valid_types = {
+	"json" : 
+		[
+			"try: return type(eval(value)) == dict , value",
+			 "except: return False , None"
+		 ],
+	"integer" : [" return type(value) == int , value"],
+	"string" : [" return type(value) == str , value"],
+	"norm" : [
+		"if type(value) not in [float,int]: return False,None",
+		"return (True, value) if value >= 0 and value <= 1 else (False,None)"
+	],
+	"date" : 
+	[
+		"if type(value) != str : return False,None",
+		"value = value.split('-')",
+		"try: int(value[0]),int(value[1]),int(value[2])",
+		"except: return False,None",
+		"return True,'-'.join([value[0],value[1],value[2]])"
+	],
+}
+
+tab = lambda x : x * "\t"
+
+def get_all_data_types():
+	data_types = set()
+	for node in nodes():
+		for param,typ in structure[node]["attribute"]:
+			data_types.add(typ.lower())
+		for node_link in structure[node]["link"]:
+			for param,typ in structure[node]["link"][node_link]["attribute"]:
+				data_types.add(typ.lower())
+	return data_types
+	
+def create_valid_value():
+	
+	print("class Valid_values:\n")
+	data_types = get_all_data_types()
+	for typ in data_types:
+		print(f'{tab(1)}@staticmethod')
+		print(f'{tab(1)}def is_{typ}(value):')
+		cod = "\n"+tab(3)
+		print(f'{tab(3)}{cod.join(valid_types[typ])}')
+		print()
+	
+	print("import valid_values")	
+	print()
+	print("class Test_valid:")
+	tests_ok = ['"string"',"0.1",'"1010-20-30"',"30",'\'{"a":2}\'']
+	for typ in data_types:
+		print(f'{tab(1)}@staticmethod')
+		print(f'{tab(1)}def test_is_{typ}_from_valid():')
+		print(f'{tab(2)}valid = valid_values.Valid_values()')
+		print()
+		for test in tests_ok:
+			print(f'{tab(2)}x,y = valid.is_{typ}({test})')
+			try: ns = test.replace('"','')
+			except: ns = test
+			print(f'{tab(2)}if x:print("{ns} is a {typ} , ret=",y)')
+			print()
+		print()
+	print(f'if __name__ == "__main__":')
+	print(f'{tab(1)}t = Test_valid()')
+	for typ in data_types:
+		print(f'{tab(1)}t.test_is_{typ}_from_valid()')
+			
+def create_model_classes():
+	
+	for node in nodes():
+		print("from .verify import valid_values\n")
+		print(f'class {node}:\n')
+		cod = []
+		for param,typ in structure[node]["attribute"]:
+			cod.append(param.lower())
+		print(f'{tab(1)}def __init__(self,{",".join(cod)}):')
+		for param in cod:
+			print(f'{tab(2)}self.{param} = {param}')
+			print(f'{tab(2)}self.valid = valid_values.Valid_values()')
+		print()
+		print(f'{tab(1)}def valid_me(self):')
+		print(f'{tab(2)}acumulator = True')
+		for param,typ in structure[node]["attribute"]:
+			print(f'{tab(2)}x,self.{param} = self.valid.is_{typ}(self.{param.lower()})')
+			print(f'{tab(2)}acumulator = x and acumulator')
+		print(f'{tab(2)}return acumulator')
+		print()
+		print(f'{tab(1)}def insert(self):')
+		print(f'{tab(2)}if self.valid_me() :')
+		print(f'{tab(3)}return self._query_add()')
+		print(f'{tab(2)}else : return None')
+		print()
+		
+		print(f'{tab(1)}def _query_add(self):')
+		print(f'{tab(2)}def inner(tx):')
+		print(f'{tab(3)}result = tx.run("create (x:{node}) "')
+		cod = ""
+		for att,typ in structure[node]["attribute"]:
+			if cod : cod += ",\n"+tab(4)  
+			cod += f'{att.lower()} = self.{att.lower()}'
+		for att,typ in structure[node]["attribute"]:
+			print(f'{tab(4)}"SET x.{att} = ${att.lower()} "')
+		print(f'{tab(4)}"return x"{"," if cod else ""}')
+		print(f'{tab(4)}{cod})')
+		print(f'{tab(3)}return result.single()[0]')
+		print(f'{tab(2)}return inner')
+		print()
+
+def create_api():
+	for node in nodes():
+		print(f'from node import {node.lower()}')
+	for node in nodes():
+		print()
+		route = f'/v1/{node.lower()}/<int:id_{node.lower()}>'
+		print(f'@app.route("{route}")')
+		print(f'def get_{node.lower()}(id_{node.lower()}):')
+		print()
+
+create_api()
+#create_valid_value()		
+#create_model_classes()
+#menu()
