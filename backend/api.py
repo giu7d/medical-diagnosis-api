@@ -1,18 +1,25 @@
 from flask import Flask , request
 from models import *
 from links import *
+from connection import Connection
 
 app = Flask(__name__)
+connection = Connection("bolt://52.72.13.205:51855","neo4j","decreases-profile-aluminum")
 
 @app.route("/v1/disease/<int:id_disease>")
 def get_disease(id_disease):
-	return "you try to get Disease with id "+str(id_disease)
+	obj = Disease()
+	obj.id_disease = id_disease
+	return { "values" : connection.get(obj)}
 
 @app.route("/v1/disease/" , methods = ["POST"])
 def post_disease():
 	try:
-		obj = Disease().from_json(request.json)
-		return "OK"
+		obj = Disease()
+		obj.from_json(request.json)
+		res ={"values":connection.post(obj)}
+		if not res : return "error to get Disease"
+		else: return res
 	except: print("error in POST -> Disease")
 	return "fail to POST Disease with something"
 
@@ -35,13 +42,18 @@ def post_require( id_disease , id_question ):
 
 @app.route("/v1/symptom/<int:id_symptom>")
 def get_symptom(id_symptom):
-	return "you try to get Symptom with id "+str(id_symptom)
+	obj = Symptom()
+	obj.id_symptom = id_symptom
+	return { "values" : connection.get(obj)}
 
 @app.route("/v1/symptom/" , methods = ["POST"])
 def post_symptom():
 	try:
-		obj = Symptom().from_json(request.json)
-		return "OK"
+		obj = Symptom()
+		obj.from_json(request.json)
+		res ={"values":connection.post(obj)}
+		if not res : return "error to get Symptom"
+		else: return res
 	except: print("error in POST -> Symptom")
 	return "fail to POST Symptom with something"
 
@@ -56,26 +68,36 @@ def post_ask( id_symptom , id_question ):
 
 @app.route("/v1/question/<int:id_question>")
 def get_question(id_question):
-	return "you try to get Question with id "+str(id_question)
+	obj = Question()
+	obj.id_question = id_question
+	return { "values" : connection.get(obj)}
 
 @app.route("/v1/question/" , methods = ["POST"])
 def post_question():
 	try:
-		obj = Question().from_json(request.json)
-		return "OK"
+		obj = Question()
+		obj.from_json(request.json)
+		res ={"values":connection.post(obj)}
+		if not res : return "error to get Question"
+		else: return res
 	except: print("error in POST -> Question")
 	return "fail to POST Question with something"
 
 
 @app.route("/v1/person/<int:id_person>")
 def get_person(id_person):
-	return "you try to get Person with id "+str(id_person)
+	obj = Person()
+	obj.id_person = id_person
+	return { "values" : connection.get(obj)}
 
 @app.route("/v1/person/" , methods = ["POST"])
 def post_person():
 	try:
-		obj = Person().from_json(request.json)
-		return "OK"
+		obj = Person()
+		obj.from_json(request.json)
+		res ={"values":connection.post(obj)}
+		if not res : return "error to get Person"
+		else: return res
 	except: print("error in POST -> Person")
 	return "fail to POST Person with something"
 
@@ -106,13 +128,18 @@ def post_at( id_person , id_location ):
 
 @app.route("/v1/location/<int:id_location>")
 def get_location(id_location):
-	return "you try to get Location with id "+str(id_location)
+	obj = Location()
+	obj.id_location = id_location
+	return { "values" : connection.get(obj)}
 
 @app.route("/v1/location/" , methods = ["POST"])
 def post_location():
 	try:
-		obj = Location().from_json(request.json)
-		return "OK"
+		obj = Location()
+		obj.from_json(request.json)
+		res ={"values":connection.post(obj)}
+		if not res : return "error to get Location"
+		else: return res
 	except: print("error in POST -> Location")
 	return "fail to POST Location with something"
 

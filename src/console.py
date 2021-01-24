@@ -96,22 +96,30 @@ def create_api():
 	print(f'from flask import Flask , request')
 	print(f'from models import *')
 	print(f'from links import *')
+	print(f'from connection import Connection')
 	print("\napp = Flask(__name__)")
+	print(f'connection = Connection("bolt://52.72.13.205:51855","neo4j","decreases-profile-aluminum")')
 	for node in nodes():
 		print()
 		
 		route = f'/v1/{node.lower()}/<int:id_{node.lower()}>'
+		
 		print(f'@app.route("{route}")')
 		print(f'def get_{node.lower()}(id_{node.lower()}):')
-		print(f'{tab(1)}return "you try to get {node} with id "+str(id_{node.lower()})')
+		print(f'{tab(1)}obj = {node}()')
+		print(f'{tab(1)}obj.id_{node.lower()} = id_{node.lower()}')
+		print(f'{tab(1)}return '+'{ "values" : connection.get(obj)}')
 		print()
 		
 		route = f'/v1/{node.lower()}/'
 		print(f'@app.route("{route}" , methods = ["POST"])')
 		print(f'def post_{node.lower()}():')
 		print(f'{tab(1)}try:')
-		print(f'{tab(2)}obj = {node}().from_json(request.json)')
-		print(f'{tab(2)}return "OK"')
+		print(f'{tab(2)}obj = {node}()')
+		print(f'{tab(2)}obj.from_json(request.json)')
+		print(f'{tab(2)}res ='+'{"values":connection.post(obj)}')
+		print(f'{tab(2)}if not res : return "error to get {node}"')
+		print(f'{tab(2)}else: return res')
 		print(f'{tab(1)}except: print("error in POST -> {node}")')
 		print(f'{tab(1)}return "fail to POST {node} with something"')
 		print()
@@ -234,7 +242,7 @@ def create_models_links():
 			print()
 			
 			
-create_models_links()
-create_models()
+#create_models_links()
+#create_models()
 create_api()
 
