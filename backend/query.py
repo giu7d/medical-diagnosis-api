@@ -26,10 +26,17 @@ class Query :
 				"with p, diseases + collect(d) as diseases "
 
 				"UNWIND diseases as d "
-				"return d , count(d) order by count(d) DESC LIMIT 3",
+				"return d.Name as name , count(d) as cont order by cont DESC LIMIT 3",
 				person_id = person_id )
 			return list(result)
-		return inner
+		
+		def view(record):
+			return {
+				"disease" : record["name"],
+				"quantity" : record["cont"]
+			}
+		
+		return inner , view
 	
 	def get_next_question(self,person_id):
 		def inner(tx):
@@ -60,10 +67,23 @@ class Query :
 				"unwind questions as question "
 				"with question , count(question) as cont "
 				"match (q:Question) where id(q) = question "
-				"return q.Description as question order by cont desc limit 1 ",
+				"return q.Description as question, "
+				"id(q) as quest_id, "
+				"q.Name as name,"
+				"q.MetaAnswer as meta "
+				"order by cont desc limit 1 ",
 				person_id = person_id )
 			return list(result)
-		return inner
+		
+		def view(record):
+			return {
+				"question_id" : record["quest_id"],
+				"question" : record["question"],
+				"name" : record["name"],
+				"meta" : record["meta"]
+			}
+			
+		return inner , view
 	
 	def rank_simptom_by_location(self,datetime,qt_days,radius,latitude,longitude):
 		def inner(tx):
@@ -86,7 +106,14 @@ class Query :
 				"return s.Name as symptom, cont as quantity , average order by cont desc ",
 				datetime = datetime , qt_days = qt_days , radius = radius , latitude = latitude , longitude = longitude)
 			return list(result)
-		return inner
+		
+		def view(record):
+			return {
+				"symptom" : record["symptom"],
+				"quantity" : record["quantity"]
+			}
+			
+		return inner , view
 	
 	def history_symptons(self,person_id):
 		def inner(tx):
@@ -100,4 +127,14 @@ class Query :
 				"order by f.DateTime desc", 
 			person_id = person_id)
 			return list(result)
-		return inner
+			
+		def view(record):
+			return {
+				"symptom" : record["symptom"],
+				"date" : 
+					f'{record["date"].year}-'
+					f'{record["date"].month}-'
+					f'{record["date"].day}',
+				"intensity":record["intensity"]
+			}
+		return inner , view

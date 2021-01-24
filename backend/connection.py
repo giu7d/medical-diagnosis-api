@@ -24,6 +24,11 @@ class Connection:
 			ret = []
 			for x in res : ret +=[obj.record_to_json(i) for i in x]
 			return ret
+			
+	def query(self,query,view):
+		with self.driver.session() as session:
+			res = session.write_transaction(query) 
+			return [ view(x) for x in res]
 		
 if __name__ == "__main__" :
 	from models import Person
