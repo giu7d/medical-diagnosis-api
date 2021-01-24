@@ -12,16 +12,24 @@ class Connection:
 		if None == obj.post(): return None
 		with self.driver.session() as session:
 			res = session.write_transaction(obj.post(),None)
-			return res
+			if not res : return none
+			ret = []
+			for x in res : ret +=[obj.record_to_json(i) for i in x]
+			return ret
 			
 	def get(self,obj):
 		if None == obj.get_id() : return None
 		with self.driver.session() as session:
-			res = session.write_transaction(obj.get(),None)
-			return [obj.record_to_json(i) for i in res[0]]
+			res = session.write_transaction(obj.get(),None) 
+			ret = []
+			for x in res : ret +=[obj.record_to_json(i) for i in x]
+			return ret
+			
+	def query(self,query,view):
+		with self.driver.session() as session:
+			res = session.write_transaction(query) 
+			return [ view(x) for x in res]
 		
-	
-
 if __name__ == "__main__" :
 	from models import Person
 	from links import *
@@ -33,6 +41,6 @@ if __name__ == "__main__" :
 	#l.answer = 1
 	#l.datetime="2030-10-10"
 	p = Person()
-	p.id_person = 0
-	#p.name = "lar"
+	p.id_person = 43
+	#p.name = "lariloularei"
 	print(c.get(p))

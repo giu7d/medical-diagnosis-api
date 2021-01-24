@@ -3,11 +3,11 @@ import random
 
 # =============================================================================
 # funtion to connect on database
-neo = neo_connection.Neo4jConnection(
-    uri="bolt://100.25.118.63:32789",
-    user="neo4j",
-    pwd="meeting-struts-pilot")
 
+neo = neo_connection.Neo4jConnection(
+    uri="bolt://52.72.13.205:51855",
+    user="neo4j",
+    pwd="decreases-profile-aluminum")
 
 import random
 

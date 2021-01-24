@@ -8,13 +8,18 @@ class Link_has:
 	def post(self):
 		if self.verify() == False : return None
 		def inner(tx,ign):
-			result = tx.run("match (a:Disease) match (b:Symptom) "
+			result = tx.run(
+				"match (a:Disease) match (b:Symptom) "
 				"where id(a) = $ida and id(b) = $idb "
 				"create (a)-[c:HAS]->(b) "
 				"set c.minvalue = $minvalue "
 				"set c.maxvalue = $maxvalue "
-				"return c" , ida = self.id_disease , idb = self.id_symptom , minvalue = self.minvalue , maxvalue = self.maxvalue)
-			return result
+				"return c" , 
+				ida = self.id_disease , 
+				idb = self.id_symptom , 
+				minvalue = self.minvalue , 
+				maxvalue = self.maxvalue)
+			return list(result)
 		return inner
 
 	def verify(self):
@@ -30,6 +35,11 @@ class Link_has:
 		try : self.maxvalue = jsn["maxvalue"]
 		except : print("maxValue not find")
 		return True
+		
+	def record_to_json(self,record):
+		return {
+			"id" : record.id
+		}
 
 class Link_require:
 
@@ -41,13 +51,18 @@ class Link_require:
 	def post(self):
 		if self.verify() == False : return None
 		def inner(tx,ign):
-			result = tx.run("match (a:Disease) match (b:Question) "
+			result = tx.run(
+				"match (a:Disease) match (b:Question) "
 				"where id(a) = $ida and id(b) = $idb "
 				"create (a)-[c:REQUIRE]->(b) "
 				"set c.minvalue = $minvalue "
 				"set c.maxvalue = $maxvalue "
-				"return c" , ida = self.id_disease , idb = self.id_question , minvalue = self.minvalue , maxvalue = self.maxvalue)
-			return result
+				"return c" , 
+				ida = self.id_disease , 
+				idb = self.id_question , 
+				minvalue = self.minvalue , 
+				maxvalue = self.maxvalue)
+			return list(result)
 		return inner
 
 	def verify(self):
@@ -63,6 +78,11 @@ class Link_require:
 		try : self.maxvalue = jsn["maxvalue"]
 		except : print("maxValue not find")
 		return True
+		
+	def record_to_json(self,record):
+		return {
+			"id" : record.id
+		}
 
 class Link_ask:
 
@@ -72,11 +92,14 @@ class Link_ask:
 	def post(self):
 		if self.verify() == False : return None
 		def inner(tx,ign):
-			result = tx.run("match (a:Symptom) match (b:Question) "
+			result = tx.run(
+				"match (a:Symptom) match (b:Question) "
 				"where id(a) = $ida and id(b) = $idb "
 				"create (a)-[c:ASK]->(b) "
-				"return c" , ida = self.id_symptom , idb = self.id_question , )
-			return result
+				"return c" , 
+				ida = self.id_symptom , 
+				idb = self.id_question )
+			return list(result)
 		return inner
 
 	def verify(self):
@@ -86,6 +109,11 @@ class Link_ask:
 
 	def from_json(self,jsn):
 		return True
+
+	def record_to_json(self,record):
+		return {
+			"id" : record.id
+		}
 
 class Link_feel:
 
@@ -97,13 +125,18 @@ class Link_feel:
 	def post(self):
 		if self.verify() == False : return None
 		def inner(tx,ign):
-			result = tx.run("match (a:Person) match (b:Symptom) "
+			result = tx.run(
+				"match (a:Person) match (b:Symptom) "
 				"where id(a) = $ida and id(b) = $idb "
 				"create (a)-[c:FEEL]->(b) "
 				"set c.answer = $answer "
 				"set c.datetime = datetime($datetime) "
-				"return c" , ida = self.id_person , idb = self.id_symptom , answer = self.answer , datetime = self.datetime)
-			return result
+				"return c" , 
+				ida = self.id_person , 
+				idb = self.id_symptom , 
+				answer = self.answer , 
+				datetime = self.datetime)
+			return list(result)
 		return inner
 
 	def verify(self):
@@ -120,6 +153,11 @@ class Link_feel:
 		except : print("DateTime not find")
 		return True
 
+	def record_to_json(self,record):
+		return {
+			"id" : record.id
+		}
+
 class Link_info:
 
 	id_person = None
@@ -130,13 +168,18 @@ class Link_info:
 	def post(self):
 		if self.verify() == False : return None
 		def inner(tx,ign):
-			result = tx.run("match (a:Person) match (b:Question) "
+			result = tx.run(
+				"match (a:Person) match (b:Question) "
 				"where id(a) = $ida and id(b) = $idb "
 				"create (a)-[c:INFO]->(b) "
 				"set c.answer = $answer "
 				"set c.datetime = datetime($datetime) "
-				"return c" , ida = self.id_person , idb = self.id_question , answer = self.answer , datetime = self.datetime)
-			return result
+				"return c" , 
+				ida = self.id_person , 
+				idb = self.id_question , 
+				answer = self.answer , 
+				datetime = self.datetime)
+			return list(result)
 		return inner
 
 	def verify(self):
@@ -153,6 +196,11 @@ class Link_info:
 		except : print("DateTime not find")
 		return True
 
+	def record_to_json(self,record):
+		return {
+			"id" : record.id
+		}
+
 class Link_at:
 
 	id_person = None
@@ -162,12 +210,16 @@ class Link_at:
 	def post(self):
 		if self.verify() == False : return None
 		def inner(tx,ign):
-			result = tx.run("match (a:Person) match (b:Location) "
+			result = tx.run(
+				"match (a:Person) match (b:Location) "
 				"where id(a) = $ida and id(b) = $idb "
 				"create (a)-[c:AT]->(b) "
 				"set c.datetime = datetime($datetime) "
-				"return c" , ida = self.id_person , idb = self.id_location , datetime = self.datetime)
-			return result
+				"return c" , 
+				ida = self.id_person , 
+				idb = self.id_location , 
+				datetime = self.datetime)
+			return list(result)
 		return inner
 
 	def verify(self):
@@ -181,3 +233,7 @@ class Link_at:
 		except : print("DateTime not find")
 		return True
 
+	def record_to_json(self,record):
+		return {
+			"id" : record.id
+		}

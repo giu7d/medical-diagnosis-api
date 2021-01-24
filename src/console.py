@@ -85,7 +85,32 @@ structure = {
 		"link" : {},
 	}
 }
-	
+
+query = {
+	"rank_disease" : { 
+		"attribute" : 
+			[("person_id","int")] 
+	},
+	"get_next_question" : { 
+		"attribute" : 
+			[("person_id","int")]
+	},
+	"rank_simptom_by_location" : { 
+	"attribute" : 
+		[
+			("datetime","string"),
+			("qt_days","int"),
+			("radius","float"),
+			("latitude","float"),
+			("longitude","float")
+		]
+	},
+	"history_symptons" : {
+		"attribute" : 
+			[("person_id","int")]
+	 }
+}
+
 def nodes():
 	return [node for node in structure]
 	
@@ -95,23 +120,33 @@ def links(node):
 def create_api():
 	print(f'from flask import Flask , request')
 	print(f'from models import *')
+	print(f'from query import Query')
 	print(f'from links import *')
+	print(f'from connection import Connection')
 	print("\napp = Flask(__name__)")
+	print("\nquery = Query()")
+	print(f'connection = Connection("bolt://52.72.13.205:51855","neo4j","decreases-profile-aluminum")')
 	for node in nodes():
 		print()
 		
 		route = f'/v1/{node.lower()}/<int:id_{node.lower()}>'
+		
 		print(f'@app.route("{route}")')
 		print(f'def get_{node.lower()}(id_{node.lower()}):')
-		print(f'{tab(1)}return "you try to get {node} with id "+str(id_{node.lower()})')
+		print(f'{tab(1)}obj = {node}()')
+		print(f'{tab(1)}obj.id_{node.lower()} = id_{node.lower()}')
+		print(f'{tab(1)}return '+'{ "values" : connection.get(obj)}')
 		print()
 		
-		route = f'/v1/{node.lower()}/'
+		route = f'/v1/{node.lower()}'
 		print(f'@app.route("{route}" , methods = ["POST"])')
 		print(f'def post_{node.lower()}():')
 		print(f'{tab(1)}try:')
-		print(f'{tab(2)}obj = {node}().from_json(request.json)')
-		print(f'{tab(2)}return "OK"')
+		print(f'{tab(2)}obj = {node}()')
+		print(f'{tab(2)}obj.from_json(request.json)')
+		print(f'{tab(2)}res ='+'{"values":connection.post(obj)}')
+		print(f'{tab(2)}if not res : return "error to get {node}"')
+		print(f'{tab(2)}else: return res')
 		print(f'{tab(1)}except: print("error in POST -> {node}")')
 		print(f'{tab(1)}return "fail to POST {node} with something"')
 		print()
@@ -127,6 +162,15 @@ def create_api():
 			print(f'{tab(1)}obj.from_json(request.json)')
 			print(f'{tab(1)}return "ok"')
 			print()
+	
+	for qry in query:
+		x = [ f'<{y}:{x}>' for x,y in query[qry]["attribute"]]
+		print(f'@app.route("/v1/{qry}/{"/".join(x)}")')
+		x = ",".join([x for x,y in query[qry]["attribute"]])
+		print(f'def get_{qry}({x}):')
+		print(f'{tab(1)}res = connection.query(*query.{qry}({x}))')
+		print(f'{tab(1)}return '+'{ "value" : res }')
+		print()
 		
 	print("app.run()")
 
@@ -134,7 +178,7 @@ def inner_get(node,ident=2):
 	x = f'{tab(ident)}def inner(tx,ign):\n'
 	x+= f'{tab(ident+1)}result = tx.run("match (x:{node}) where id(x) = $my_id return x",my_id = self.id_{node.lower()})\n'
 	x+= f'{tab(ident+1)}return list(result)\n'
-	x+= f'{tab(ident)}return inner'
+	x+= f'{tab(ident)}return inner'	
 	return x
 	
 
@@ -232,9 +276,16 @@ def create_models_links():
 				print(f'{tab(2)}except : print("{att} not find")')
 			print(f'{tab(2)}return True')
 			print()
-			
-			
-create_models_links()
-create_models()
+
+def create_post_tests():
+	for node in nodes():
+		jsn = {}
+		for att,typ in structure[node]["attribute"]:
+			jsn[att.lower()] = f'{att} is {typ}'
+		print(f'test_post("/{node.lower()}",{jsn})')
+
+#create_post_tests()			
+#create_models_links()
+#create_models()
 create_api()
 
