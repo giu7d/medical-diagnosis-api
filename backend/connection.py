@@ -12,7 +12,6 @@ class Connection:
 		if None == obj.post(): return None
 		with self.driver.session() as session:
 			res = session.write_transaction(obj.post(),None)
-			if not res : return none
 			ret = []
 			for x in res : ret +=[obj.record_to_json(i) for i in x]
 			return ret
