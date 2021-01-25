@@ -12,8 +12,8 @@ class Link_has:
 				"match (a:Disease) match (b:Symptom) "
 				"where id(a) = $ida and id(b) = $idb "
 				"create (a)-[c:HAS]->(b) "
-				"set c.minvalue = $minvalue "
-				"set c.maxvalue = $maxvalue "
+				"set c.minValue = $minvalue "
+				"set c.maxValue = $maxvalue "
 				"return c" , 
 				ida = self.id_disease , 
 				idb = self.id_symptom , 
@@ -55,8 +55,8 @@ class Link_require:
 				"match (a:Disease) match (b:Question) "
 				"where id(a) = $ida and id(b) = $idb "
 				"create (a)-[c:REQUIRE]->(b) "
-				"set c.minvalue = $minvalue "
-				"set c.maxvalue = $maxvalue "
+				"set c.minValue = $minvalue "
+				"set c.maxValue = $maxvalue "
 				"return c" , 
 				ida = self.id_disease , 
 				idb = self.id_question , 
@@ -129,8 +129,8 @@ class Link_feel:
 				"match (a:Person) match (b:Symptom) "
 				"where id(a) = $ida and id(b) = $idb "
 				"create (a)-[c:FEEL]->(b) "
-				"set c.answer = $answer "
-				"set c.datetime = datetime($datetime) "
+				"set c.Answer = $answer "
+				"set c.DateTime = datetime($datetime) "
 				"return c" , 
 				ida = self.id_person , 
 				idb = self.id_symptom , 
@@ -172,8 +172,8 @@ class Link_info:
 				"match (a:Person) match (b:Question) "
 				"where id(a) = $ida and id(b) = $idb "
 				"create (a)-[c:INFO]->(b) "
-				"set c.answer = $answer "
-				"set c.datetime = datetime($datetime) "
+				"set c.Answer = $answer "
+				"set c.DateTime = datetime($datetime) "
 				"return c" , 
 				ida = self.id_person , 
 				idb = self.id_question , 
@@ -214,7 +214,7 @@ class Link_at:
 				"match (a:Person) match (b:Location) "
 				"where id(a) = $ida and id(b) = $idb "
 				"create (a)-[c:AT]->(b) "
-				"set c.datetime = datetime($datetime) "
+				"set c.DateTime = datetime($datetime) "
 				"return c" , 
 				ida = self.id_person , 
 				idb = self.id_location , 
@@ -231,6 +231,52 @@ class Link_at:
 	def from_json(self,jsn):
 		try : self.datetime = jsn["datetime"]
 		except : print("DateTime not find")
+		return True
+
+	def record_to_json(self,record):
+		return {
+			"id" : record.id
+		}
+		
+class Link_answer:
+
+	id_person = 0
+	id_question = 0
+	datetime = None
+	answer = None
+
+	def post(self):
+		if self.verify() == False : return None
+		def inner(tx,ign):
+			result = tx.run(
+				"match (p:Person) where id(p) = $idp match (q:Question) where id(q) = $idq "
+				"optional match (q)<-[:ASK]-(s:Symptom) "
+				"with p, q , collect(id(s)) as s , $answer as answer , datetime($datetime) as dt "
+				"call apoc.do.when( size(s) > 0 ,"
+				"'match (s:Symptom)-[:ASK]->(q) create (p)-[x:FEEL]->(s) set x.Answer = answer set x.DateTime = dt return x',"
+				'"create (p)-[x:INFO]->(q) set x.Answer = answer set x.DateTime = dt return x",'
+				"{p : p , q : q , answer : answer , dt : dt})"
+				"yield value "
+				"return value.x", 
+				idp = self.id_person , 
+				idq = self.id_question ,
+				answer = self.answer, 
+				datetime = self.datetime)
+			return list(result)
+		return inner
+
+	def verify(self):
+		#if self.id_person == None : return False
+		#if self.id_question == False : return False
+		if self.datetime == None : return False
+		#if self.answer == None : return False
+		return True
+
+	def from_json(self,jsn):
+		try : self.datetime = jsn["datetime"]
+		except : print("DateTime not find")
+		try : self.answer = jsn["answer"]
+		except : print("Answer not find")
 		return True
 
 	def record_to_json(self,record):

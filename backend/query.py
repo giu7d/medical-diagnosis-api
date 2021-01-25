@@ -17,7 +17,7 @@ class Query :
 				"and not d.Name in cantHave "
 				"with p, collect(d) as diseases , cantHave "
 
-				"optional match (p)-[f:FELL]->(s:Symptom)-[:ASK]->(q:Question) "
+				"optional match (p)-[f:FEEL]->(s:Symptom)-[:ASK]->(q:Question) "
 				"where f.DateTime + duration({days:40}) >= datetime() "
 				"optional match (s)<-[h:HAS]-(d:Disease) "
 				"where f.Answer <= h.maxValue  "
@@ -41,44 +41,33 @@ class Query :
 	def get_next_question(self,person_id):
 		def inner(tx):
 			result = tx.run(
-				"match (person:Person) "
-				"where id(person) = $person_id "
-				"optional match (person)-[i:INFO]->(q:Question)<-[r:REQUIRE]-(d:Disease) "
-				"where i.DateTime + q.DueAnswer >= datetime() and "
-				"(i.Answer < r.minValue or i.Answer > r.maxValue) "
-				"with collect(d.Name) as cantHave , person , collect(r) as answered "
-
-				"optional match(d:Disease) "
-				"where not d.Name in cantHave  "
-				"with person , d , answered "
-
-				"optional match (d)-[r:REQUIRE]->(q:Question) "
-				"where not r in answered "
-				"with person , d , collect(id(q)) as infoQuestion "
-
-				"optional match(person)-[f:FELL]->(:Symptom)-[:ASK]->(q:Question) "
-				"where f.DateTime + q.DueAnswer >= datetime() "
-				"with person , d , infoQuestion ,  collect(q.Description) as answered "
-				"optional match (d)-[:HAS]->(:Symptom)-[:ASK]->(q:Question) "
-				"where not q.Description in answered "
-
-				"with person , collect(id(q)) + infoQuestion as questions "
-
-				"unwind questions as question "
-				"with question , count(question) as cont "
-				"match (q:Question) where id(q) = question "
-				"return q.Description as question, "
-				"id(q) as quest_id, "
-				"q.Name as name,"
-				"q.MetaAnswer as meta "
-				"order by cont desc limit 1 ",
+				" match (p:Person)"
+				" where id(p) = $person_id"
+				" optional match (p)-[i:INFO]->(q:Question)<-[r:REQUIRE]-(d:Disease)"
+				" where i.DateTime + q.DueAnswer > datetime()"
+				" and (i.Answer < r.minValue or i.Answer > r.maxValue)"
+				" with p , collect(d) as incompat"
+				" optional match(p)-[f:FEEL]->(s:Symptom)-[:ASK]->(q:Question)"
+				" where f.DateTime + q.DueAnswer >= datetime()"
+				" with p , incompat , collect(q) as answered_symptoms"
+				" optional match (d:Disease)-[:HAS]->(:Symptom)-[:ASK]->(q:Question)"
+				" where not d in incompat and not q in answered_symptoms"
+				" with p , collect (q) as not_ans_symp , incompat"
+				" optional match (p)-[i:INFO]->(q:Question)"
+				" where i.DateTime + q.DueAnswer >= datetime()"
+				" with p , not_ans_symp , incompat , collect(q) as answered_infos"
+				" optional match (d:Disease)-[r:REQUIRE]->(q:Question)"
+				" where not d in incompat and not q in answered_infos"
+				" with not_ans_symp + collect(q) as questions"
+				" unwind questions as question"
+				" return question.Description as desc ,id(question) as quest_id , question.Name as name , question.MetaAnswer as meta , count(question) as cont order by cont DESC limit 1",
 				person_id = person_id )
 			return list(result)
 		
 		def view(record):
 			return {
 				"question_id" : record["quest_id"],
-				"question" : record["question"],
+				"question" : record["desc"],
 				"name" : record["name"],
 				"meta" : record["meta"]
 			}
@@ -100,7 +89,7 @@ class Query :
 				"match (p:Person)-[a:AT]->(l) "
 				"where a.DateTime >= param.date and a.DateTime <= param.date + param.interval "
 				"with p,param "
-				"match (p)-[f:FELL]->(s:Symptom) "
+				"match (p)-[f:FEEL]->(s:Symptom) "
 				"where f.DateTime >= param.date and f.DateTime <= param.date + param.interval and f.Answer > 0.01 "
 				"with s , count(s) as cont , avg(f.Answer) as average "
 				"return s.Name as symptom, cont as quantity , average order by cont desc ",
@@ -118,7 +107,7 @@ class Query :
 	def history_symptons(self,person_id):
 		def inner(tx):
 			result = tx.run(
-				"match (p:Person)-[f:FELL]->(s:Symptom) "
+				"match (p:Person)-[f:FEEL]->(s:Symptom) "
 				"where f.Answer > 0.01 "
 				"and id(p) = $person_id "
 				"return f.DateTime as date, "

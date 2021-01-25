@@ -83,7 +83,6 @@ def post_question():
 		return res
 	except:	return "fail to POST Question with something",400
 
-
 @app.route("/v1/person/<int:id_person>")
 def get_person(id_person):
 	obj = Person()
@@ -126,6 +125,14 @@ def post_at( id_person , id_location ):
 	res ={"values":connection.post(obj)}
 	return res
 
+@app.route("/v1/answer/<int:id_person>/<int:id_question>" , methods = ["POST"])
+def post_answer( id_person , id_question ):
+	obj = Link_answer()
+	obj.id_person = id_person
+	obj.id_question = id_question
+	obj.from_json(request.json)
+	res ={"values":connection.post(obj)}
+	return res
 
 @app.route("/v1/location/<int:id_location>")
 def get_location(id_location):

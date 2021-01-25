@@ -6,7 +6,11 @@ class Disease:
 
 	def get(self):
 		def inner(tx,ign):
-			result = tx.run("match (x:Disease) where id(x) = $my_id return x",my_id = self.id_disease)
+			result = tx.run(
+				"match (x:Disease) "
+				"where id(x) = $my_id "
+				"return x",
+				my_id = self.id_disease)
 			return list(result)
 		return inner
 
@@ -21,10 +25,13 @@ class Disease:
 	def post(self):
 		if self.verify() == False : return None
 		def inner(tx,ign):
-			result = tx.run("create (x:Disease) "
+			result = tx.run(
+				"create (x:Disease) "
 				"set x.Name = $name "
 				"set x.Description = $description "
-				"return x", name = self.name , description = self.description)
+				"return x", 
+				name = self.name , 
+				description = self.description)
 			return list(result)
 		return inner
 
@@ -65,10 +72,13 @@ class Symptom:
 	def post(self):
 		if self.verify() == False : return None
 		def inner(tx,ign):
-			result = tx.run("create (x:Symptom) "
+			result = tx.run(
+				"create (x:Symptom) "
 				"set x.Name = $name "
 				"set x.Description = $description "
-				"return x", name = self.name , description = self.description)
+				"return x", 
+				name = self.name , 
+				description = self.description)
 			return list(result)
 		return inner
 
@@ -96,7 +106,11 @@ class Question:
 
 	def get(self):
 		def inner(tx,ign):
-			result = tx.run("match (x:Question) where id(x) = $my_id return x",my_id = self.id_question)
+			result = tx.run(
+				"match (x:Question) "
+				"where id(x) = $my_id "
+				"return x",
+				my_id = self.id_question)
 			return list(result)
 		return inner
 
@@ -113,12 +127,17 @@ class Question:
 	def post(self):
 		if self.verify() == False : return None
 		def inner(tx,ign):
-			result = tx.run("create (x:Question) "
+			result = tx.run(
+				"create (x:Question) "
 				"set x.Name = $name "
 				"set x.Description = $description "
 				"set x.DueAnswer = $dueanswer "
 				"set x.MetaAnswer = $metaanswer "
-				"return x", name = self.name , description = self.description , dueanswer = self.dueanswer , metaanswer = self.metaanswer)
+				"return x", 
+				name = self.name , 
+				description = self.description , 
+				dueanswer = self.dueanswer , 
+				metaanswer = self.metaanswer)
 			return list(result)
 		return inner
 
@@ -149,7 +168,11 @@ class Person:
 
 	def get(self):
 		def inner(tx,ign):
-			result = tx.run("match (x:Person) where id(x) = $my_id return x",my_id = self.id_person)
+			result = tx.run(
+				"match (x:Person) "
+				"where id(x) = $my_id "
+				"return x",
+				my_id = self.id_person)
 			return list(result)
 		return inner
 
@@ -163,9 +186,11 @@ class Person:
 	def post(self):
 		if self.verify() == False : return None
 		def inner(tx,ign):
-			result = tx.run("create (x:Person) "
+			result = tx.run(
+				"create (x:Person) "
 				"set x.Name = $name "
-				"return x", name = self.name)
+				"return x", 
+				name = self.name)
 			return list(result)
 		return inner
 
@@ -189,7 +214,11 @@ class Location:
 
 	def get(self):
 		def inner(tx,ign):
-			result = tx.run("match (x:Location) where id(x) = $my_id return x",my_id = self.id_location)
+			result = tx.run(
+				"match (x:Location) "
+				"where id(x) = $my_id "
+				"return x",
+				my_id = self.id_location)
 			return list(result)
 		return inner
 
@@ -205,11 +234,15 @@ class Location:
 	def post(self):
 		if self.verify() == False : return None
 		def inner(tx,ign):
-			result = tx.run("create (x:Location) "
+			result = tx.run(
+				"create (x:Location) "
 				"set x.Latitude = $latitude "
 				"set x.Longitude = $longitude "
 				"set x.Name = $name "
-				"return x", latitude = self.latitude , longitude = self.longitude , name = self.name)
+				"return x", 
+				latitude = self.latitude , 
+				longitude = self.longitude , 
+				name = self.name)
 			return list(result)
 		return inner
 

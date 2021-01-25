@@ -28,7 +28,9 @@ def str_dict(dic):
             v = dic[k] if not isinstance(dic[k],str) else f'"{dic[k]}"'
         else : v = rand_duration()
         x.append(f"{k}:{v}")
-    return '{'+','.join(x)+'}'
+    x = '{'+','.join(x)+'}'
+    print(x)
+    return x
     
 def rand_duration():
     x = { "days" : random.randint(1,5) }
@@ -129,7 +131,7 @@ def ask():
         x +='create (symptom)-[:ASK]->(question)'
         neo.query(x)
         
-def fell(mm=9):
+def feel(mm=9):
     for p in data["Person"]:
         qts = random.randint(1,len(data["Symptom"])-1)
         for xx in range(random.randint(1,mm)):
@@ -141,7 +143,7 @@ def fell(mm=9):
                 dat = rand_data()
                 x = 'match (person:Person { Name :"'+p+'"})\n'
                 x+= 'match (symptom:Symptom {Name:"'+ss+'"})\n'
-                x+='create (person)-[:FELL{Answer:'+rand_ans()+',DateTime:'+dat+'}]->(symptom)'
+                x+='create (person)-[:FEEL{Answer:'+rand_ans()+',DateTime:'+dat+'}]->(symptom)'
                 at(p,dat)
                 neo.query(x)
                 
@@ -201,4 +203,4 @@ ask()
 info()
 
 # uma pessoa sentiu algumas sintomas
-fell()
+feel()
