@@ -1,0 +1,159 @@
+# Saalve man, criei essa "mini linguagem" para ficar mais tranquilo de realizar
+# a criação do database com dados reais do neo4j
+
+# para gerar as queries(.txt) de criação do banco utilize (comando linux)
+# python3 parser.py < text.txt > queries.txt
+
+# para executar as queries(.txt) utilize
+# python3 execute_file < queries.txt
+
+::Disease | Name | Description
+
+"gripe"			| "desc"
+"alergia"		| "desc"
+"amigdalite"	| "desc"
+"pneumonia"		| "desc"
+"asma"			| "desc"
+"otite"			| "desc"
+"bronquite"		| "desc"
+"sinusite"		| "desc"
+
+::Symptom | Name | Description
+
+"calafrios"						| "desc"
+"cansaço excessivo"				| "desc"
+"chiado no peito"				| "desc"
+"congestão nasal"				| "desc"
+"dificuldade para respirar"		| "desc"
+"diminuição da audição"			| "desc"
+"dor de cabeça"					| "desc"
+"dor de garganta"				| "desc"
+"dores no corpo"				| "desc"
+"dores no peito"				| "desc"
+"dor no ouvido"					| "desc"
+"espirros"						| "desc"
+"fadiga"						| "desc"
+"falta de ar"					| "desc"
+"febre"							| "desc"
+"fraqueza"						| "desc"
+"gânglios linfáticos inchados"	| "desc"
+"manchas de pus nas amígdalas"	| "desc"
+"mau hálito"					| "desc"
+"náusea"						| "desc"
+"vômitos"						| "desc"
+"perda de apetite"				| "desc"
+"secreção nasal"				| "desc"
+"secreções no ouvido"			| "desc"
+"tosse seca"					| "desc"
+"tosse com catarro"				| "desc"
+"tosse com muco"				| "desc"
+"tosse com sangue"				| "desc"
+
+::Question | Name | Description | DueAnswer | MetaAnswer
+	
+"calafrios"						| "desc" | duration({days:3}) | '{json}'
+"cansaço excessivo"				| "desc" | duration({days:3}) | '{json}'
+"chiado no peito"				| "desc" | duration({days:3}) | '{json}'
+"congestão nasal"				| "desc" | duration({days:3}) | '{json}'
+"dificuldade para respirar"		| "desc" | duration({days:3}) | '{json}'
+"diminuição da audição"			| "desc" | duration({days:3}) | '{json}'
+"dor de cabeça"					| "desc" | duration({days:3}) | '{json}'
+"dor de garganta"				| "desc" | duration({days:3}) | '{json}'
+"dores no corpo"				| "desc" | duration({days:3}) | '{json}'
+"dores no peito"				| "desc" | duration({days:3}) | '{json}'
+"dor no ouvido"					| "desc" | duration({days:3}) | '{json}'
+"espirros"						| "desc" | duration({days:3}) | '{json}'
+"fadiga"						| "desc" | duration({days:3}) | '{json}'
+"falta de ar"					| "desc" | duration({days:3}) | '{json}'
+"febre"							| "desc" | duration({days:3}) | '{json}'
+"fraqueza"						| "desc" | duration({days:3}) | '{json}'
+"gânglios linfáticos inchados"	| "desc" | duration({days:3}) | '{json}'
+"manchas de pus nas amígdalas"	| "desc" | duration({days:3}) | '{json}'
+"mau hálito"					| "desc" | duration({days:3}) | '{json}'
+"náusea"						| "desc" | duration({days:3}) | '{json}'
+"vômitos"						| "desc" | duration({days:3}) | '{json}'
+"perda de apetite"				| "desc" | duration({days:3}) | '{json}'
+"secreção nasal"				| "desc" | duration({days:3}) | '{json}'
+"secreções no ouvido"			| "desc" | duration({days:3}) | '{json}'
+"tosse seca"					| "desc" | duration({days:3}) | '{json}'
+"tosse com catarro"				| "desc" | duration({days:3}) | '{json}'
+"tosse com muco"				| "desc" | duration({days:3}) | '{json}'
+"tosse com sangue"				| "desc" | duration({days:3}) | '{json}'
+
+# questoes relacionadas a informações de uma pessoa
+"info 0"	| "voecê é info 0" | duration({days:3}) | '{json}'
+"info 1"	| "info 1" | duration({days:3}) | '{json}'
+"info 2"	| "info 2" | duration({days:3}) | '{json}'
+"info 3"	| "info 3" | duration({days:3}) | '{json}'
+"info 4"	| "info 4" | duration({days:3}) | '{json}'
+"info 5"	| "info 5" | duration({days:3}) | '{json}'
+"info 6"	| "info 6" | duration({days:3}) | '{json}'
+"info 7"	| "info 7" | duration({days:3}) | '{json}'
+"info 8"	| "info 8" | duration({days:3}) | '{json}'
+"info 9"	| "info 9" | duration({days:3}) | '{json}'
+
+
+::Person | Name
+
+"ana"
+"paula"
+"pedro"
+"joão"
+"lucas"
+"felipe"
+
+::Location | Name | latitude | longitude
+
+"São Paulo" |	100	| 100
+"Bragança"  |	50	| 200
+
+->HAS | Disease | Symptom | minValue | maxValue 
+
+"gripe"	| "febre" | 0.3 | 0.5
+
+->REQUIRE | Disease | Question | minValue | maxValue 
+
+"gripe"			| "info 0" | 0.2 | 1
+
+->ASK | Symptom | Question
+
+"calafrios"						| "calafrios" 
+"cansaço excessivo"				| "cansaço excessivo"
+"chiado no peito"				| "chiado no peito"
+"congestão nasal"				| "congestão nasal"
+"dificuldade para respirar"		| "dificuldade para respirar"
+"diminuição da audição"			| "diminuição da audição"
+"dor de cabeça"					| "dor de cabeça"
+"dor de garganta"				| "dor de garganta"
+"dores no corpo"				| "dores no corpo"
+"dores no peito"				| "dores no peito"
+"dor no ouvido"					| "dor no ouvido"
+"espirros"						| "espirros"
+"fadiga"						| "fadiga"
+"falta de ar"					| "falta de ar"
+"febre"							| "febre"
+"fraqueza"						| "fraqueza"
+"gânglios linfáticos inchados"	| "gânglios linfáticos inchados"
+"manchas de pus nas amígdalas"	| "manchas de pus nas amígdalas"
+"mau hálito"					| "mau hálito"
+"náusea"						| "náusea"
+"vômitos"						| "vômitos"
+"perda de apetite"				| "perda de apetite"
+"secreção nasal"				| "secreção nasal"
+"secreções no ouvido"			| "secreções no ouvido"
+"tosse seca"					| "tosse seca"
+"tosse com catarro"				| "tosse com catarro"
+"tosse com muco"				| "tosse com muco"
+"tosse com sangue"				| "tosse com sangue"
+
+->INFO | Person | Question | Answer | DateTime 
+
+"felipe" | "info 0" | 0.3 | datetime("2020-01-29")
+
+->FEEL | Person | Symptom | Answer | DateTime
+
+"felipe" | "calafrios" | 0.4 | datetime("2020-01-17")
+
+->AT | Person | Location | DateTime
+
+"felipe" | "Bragança" | datetime("2020-01-16")

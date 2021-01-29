@@ -1,0 +1,116 @@
+match (x) detach delete x
+create (x:Disease) set x.Name = "gripe"  set x.Description =  "desc" return x
+create (x:Disease) set x.Name = "alergia"  set x.Description =  "desc" return x
+create (x:Disease) set x.Name = "amigdalite"  set x.Description =  "desc" return x
+create (x:Disease) set x.Name = "pneumonia"  set x.Description =  "desc" return x
+create (x:Disease) set x.Name = "asma"  set x.Description =  "desc" return x
+create (x:Disease) set x.Name = "otite"  set x.Description =  "desc" return x
+create (x:Disease) set x.Name = "bronquite"  set x.Description =  "desc" return x
+create (x:Disease) set x.Name = "sinusite"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "calafrios"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "cansaço excessivo"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "chiado no peito"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "congestão nasal"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "dificuldade para respirar"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "diminuição da audição"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "dor de cabeça"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "dor de garganta"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "dores no corpo"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "dores no peito"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "dor no ouvido"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "espirros"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "fadiga"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "falta de ar"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "febre"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "fraqueza"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "gânglios linfáticos inchados"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "manchas de pus nas amígdalas"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "mau hálito"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "náusea"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "vômitos"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "perda de apetite"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "secreção nasal"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "secreções no ouvido"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "tosse seca"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "tosse com catarro"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "tosse com muco"  set x.Description =  "desc" return x
+create (x:Symptom) set x.Name = "tosse com sangue"  set x.Description =  "desc" return x
+create (x:Question) set x.Name = "calafrios"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "cansaço excessivo"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "chiado no peito"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "congestão nasal"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "dificuldade para respirar"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "diminuição da audição"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "dor de cabeça"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "dor de garganta"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "dores no corpo"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "dores no peito"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "dor no ouvido"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "espirros"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "fadiga"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "falta de ar"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "febre"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "fraqueza"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "gânglios linfáticos inchados"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "manchas de pus nas amígdalas"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "mau hálito"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "náusea"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "vômitos"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "perda de apetite"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "secreção nasal"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "secreções no ouvido"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "tosse seca"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "tosse com catarro"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "tosse com muco"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "tosse com sangue"  set x.Description =  "desc"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "info 0"  set x.Description =  "voecê é info 0"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "info 1"  set x.Description =  "info 1"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "info 2"  set x.Description =  "info 2"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "info 3"  set x.Description =  "info 3"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "info 4"  set x.Description =  "info 4"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "info 5"  set x.Description =  "info 5"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "info 6"  set x.Description =  "info 6"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "info 7"  set x.Description =  "info 7"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "info 8"  set x.Description =  "info 8"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Question) set x.Name = "info 9"  set x.Description =  "info 9"  set x.DueAnswer =  duration({days:3})  set x.MetaAnswer =  '{json}' return x
+create (x:Person) set x.Name = "ana" return x
+create (x:Person) set x.Name = "paula" return x
+create (x:Person) set x.Name = "pedro" return x
+create (x:Person) set x.Name = "joão" return x
+create (x:Person) set x.Name = "lucas" return x
+create (x:Person) set x.Name = "felipe" return x
+create (x:Location) set x.Name = "São Paulo"  set x.latitude =  100  set x.longitude =  100 return x
+create (x:Location) set x.Name = "Bragança"  set x.latitude =  50  set x.longitude =  200 return x
+match (a:Disease) where a.Name = "gripe"  match (b:Symptom) where b.Name =  "febre"  create (a)-[c:HAS]->(b) set c.minValue =  0.3  set c.maxValue =  0.5 return c
+match (a:Disease) where a.Name = "gripe"  match (b:Question) where b.Name =  "info 0"  create (a)-[c:REQUIRE]->(b) set c.minValue =  0.2  set c.maxValue =  1 return c
+match (a:Symptom) where a.Name = "calafrios"  match (b:Question) where b.Name =  "calafrios" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "cansaço excessivo"  match (b:Question) where b.Name =  "cansaço excessivo" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "chiado no peito"  match (b:Question) where b.Name =  "chiado no peito" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "congestão nasal"  match (b:Question) where b.Name =  "congestão nasal" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "dificuldade para respirar"  match (b:Question) where b.Name =  "dificuldade para respirar" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "diminuição da audição"  match (b:Question) where b.Name =  "diminuição da audição" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "dor de cabeça"  match (b:Question) where b.Name =  "dor de cabeça" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "dor de garganta"  match (b:Question) where b.Name =  "dor de garganta" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "dores no corpo"  match (b:Question) where b.Name =  "dores no corpo" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "dores no peito"  match (b:Question) where b.Name =  "dores no peito" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "dor no ouvido"  match (b:Question) where b.Name =  "dor no ouvido" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "espirros"  match (b:Question) where b.Name =  "espirros" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "fadiga"  match (b:Question) where b.Name =  "fadiga" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "falta de ar"  match (b:Question) where b.Name =  "falta de ar" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "febre"  match (b:Question) where b.Name =  "febre" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "fraqueza"  match (b:Question) where b.Name =  "fraqueza" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "gânglios linfáticos inchados"  match (b:Question) where b.Name =  "gânglios linfáticos inchados" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "manchas de pus nas amígdalas"  match (b:Question) where b.Name =  "manchas de pus nas amígdalas" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "mau hálito"  match (b:Question) where b.Name =  "mau hálito" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "náusea"  match (b:Question) where b.Name =  "náusea" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "vômitos"  match (b:Question) where b.Name =  "vômitos" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "perda de apetite"  match (b:Question) where b.Name =  "perda de apetite" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "secreção nasal"  match (b:Question) where b.Name =  "secreção nasal" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "secreções no ouvido"  match (b:Question) where b.Name =  "secreções no ouvido" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "tosse seca"  match (b:Question) where b.Name =  "tosse seca" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "tosse com catarro"  match (b:Question) where b.Name =  "tosse com catarro" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "tosse com muco"  match (b:Question) where b.Name =  "tosse com muco" create (a)-[c:ASK]->(b) return c
+match (a:Symptom) where a.Name = "tosse com sangue"  match (b:Question) where b.Name =  "tosse com sangue" create (a)-[c:ASK]->(b) return c
+match (a:Person) where a.Name = "felipe"  match (b:Question) where b.Name =  "info 0"  create (a)-[c:INFO]->(b) set c.Answer =  0.3  set c.DateTime =  datetime("2020-01-29") return c
+match (a:Person) where a.Name = "felipe"  match (b:Symptom) where b.Name =  "calafrios"  create (a)-[c:FEEL]->(b) set c.Answer =  0.4  set c.DateTime =  datetime("2020-01-17") return c
+match (a:Person) where a.Name = "felipe"  match (b:Location) where b.Name =  "Bragança"  create (a)-[c:AT]->(b) set c.DateTime =  datetime("2020-01-16") return c

@@ -7,7 +7,7 @@ from connection import Connection
 app = Flask(__name__)
 
 query = Query()
-connection = Connection("bolt://52.72.13.205:51855","neo4j","decreases-profile-aluminum")
+connection = Connection("bolt://100.26.49.182:32994","neo4j","logs-odds-superstructures")
 
 @app.route("/v1/disease/<int:id_disease>")
 def get_disease(id_disease):

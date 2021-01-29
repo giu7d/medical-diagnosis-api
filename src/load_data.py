@@ -5,9 +5,9 @@ import random
 # funtion to connect on database
 
 neo = neo_connection.Neo4jConnection(
-    uri="bolt://52.72.13.205:51855",
+    uri="bolt://100.26.49.182:32994",
     user="neo4j",
-    pwd="decreases-profile-aluminum")
+    pwd="logs-odds-superstructures")
 
 import random
 
