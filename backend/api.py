@@ -180,4 +180,4 @@ def get_history_symptons():
 	res = connection.query(*query.history_symptons(person_id))
 	return { "value" : res }
 
-app.run(host="0.0.0.0")
+# app.run(host="0.0.0.0")
