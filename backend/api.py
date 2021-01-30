@@ -1,13 +1,16 @@
 from flask import Flask , request
+from flask_cors import CORS, cross_origin
 from models import *
 from query import Query
 from links import *
 from connection import Connection
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 query = Query()
-connection = Connection("bolt://52.72.13.205:51855","neo4j","decreases-profile-aluminum")
+connection = Connection("bolt://100.26.49.182:33009","neo4j","reserves-distress-magnitude")
 
 @app.route("/v1/disease/<int:id_disease>")
 def get_disease(id_disease):
@@ -177,4 +180,4 @@ def get_history_symptons():
 	res = connection.query(*query.history_symptons(person_id))
 	return { "value" : res }
 
-app.run()
+app.run(host="0.0.0.0")
