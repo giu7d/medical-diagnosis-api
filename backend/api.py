@@ -1,16 +1,28 @@
+import os
 from flask import Flask , request
 from flask_cors import CORS
 from models import *
 from query import Query
 from links import *
 from connection import Connection
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
+
+NEO4J_URL =	os.getenv("NEO4J_URL")
+NEO4J_USERNAME =	os.getenv("NEO4J_USERNAME")
+NEO4J_PASSWORD =	os.getenv("NEO4J_PASSWORD")
 
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 query = Query()
-connection = Connection("bolt://100.26.49.182:33009","neo4j","reserves-distress-magnitude")
+connection = Connection(
+	NEO4J_URL,
+	NEO4J_USERNAME,
+	NEO4J_PASSWORD
+)
 
 @app.route("/v1/disease/<int:id_disease>")
 def get_disease(id_disease):
