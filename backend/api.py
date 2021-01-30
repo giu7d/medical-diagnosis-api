@@ -1,5 +1,5 @@
 from flask import Flask , request
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from models import *
 from query import Query
 from links import *
