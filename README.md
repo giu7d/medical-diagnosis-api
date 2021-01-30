@@ -2,7 +2,14 @@
 
 ## Dependencies
 
-To use this project you should have docker installed.
+To use this project you should have `docker` installed.
+Also, you should create a `.env` with the following content:
+
+```
+NEO4J_URL=<url>
+NEO4J_USERNAME=<string>
+NEO4J_PASSWORD=<string>
+```
 
 ## How to run
 
